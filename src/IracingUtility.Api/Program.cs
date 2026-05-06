@@ -10,4 +10,14 @@ app.MapGet("/api/reference-sample", () =>
     return Results.Ok(sample);
 });
 
+app.MapGet("/api/telemetry/status", (ITelemetryConnectionStatusProvider? provider) =>
+{
+    if (provider is null)
+    {
+        return Results.Ok(new TelemetryConnectionState(false, DateTimeOffset.UtcNow, "status provider not registered in API host"));
+    }
+
+    return Results.Ok(provider.Current);
+});
+
 app.Run();
